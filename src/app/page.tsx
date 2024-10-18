@@ -17,15 +17,23 @@ interface TenantResponse {
   tenants: Tenant[];
 }
 
+async function getTenants(): Promise<TenantResponse> {
+    const response = await fetch('https://api.ai-collective.xyz/tenants/', {
+        next: {
+            revalidate: 60,
+        }
+    });
+    return response.json();
+}
+
 const Home = async () => {
-    const response = await fetch('https://api.ai-collective.xyz/tenants/');
-    const apps: TenantResponse = await response.json();
+    const apps = await getTenants();
     const getLink = (tenant_url: string) => {
         return `https://${tenant_url}.ai-collective.xyz`;
     }
     return (
         <div className="p-8 max-w-6xl mx-auto">
-            <h1 className="text-3xl font-bold mb-8 text-center">My Apps</h1>
+            <h1 className="text-3xl font-bold mb-8 text-center">Apps Library</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {apps.tenants.map(app => (
                     <div key={app.id} className="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow">
