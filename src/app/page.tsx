@@ -29,16 +29,11 @@ async function getTenants(): Promise<TenantResponse> {
     return response.json();
 }
 
-// need a new function which calls POST /tenants/ with the tenant form data to create a tenant
-// then the get /tenants should refetch / revalidate with the new tenant
-
-
 export default async function Home() {
     const apps = await getTenants();
     const getLink = (tenant_url: string): string => {
         return `https://${tenant_url}.ai-collective.xyz`;
     }
-
 
     return (
         <div className="p-8 max-w-6xl mx-auto">
