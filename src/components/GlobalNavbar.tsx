@@ -11,15 +11,25 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useRouter } from "next/navigation";
 
-export default function Navbar() {
+export default function GlobalNavbar() {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Handle form submission logic here
-    console.log("Form submitted");
+    const formData = new FormData(event.currentTarget);
+    const tenantName = formData.get("tenantName") as string;
+    
+    // Here you would typically make an API call to create the tenant
+    console.log("Creating tenant:", tenantName);
+    
+    // Close the dialog
     setOpen(false);
+    
+    // Refresh the page to show the new app module
+    router.refresh();
   };
 
   return (
@@ -37,7 +47,7 @@ export default function Navbar() {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <Label htmlFor="tenantName">Tenant Name</Label>
-                <Input id="tenantName" placeholder="Enter tenant name" />
+                <Input id="tenantName" name="tenantName" placeholder="Enter tenant name" required />
               </div>
               <Button type="submit">Create</Button>
             </form>

@@ -1,20 +1,23 @@
 // src/app/page.tsx
 
 import React from 'react';
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import PageHeader from '@/components/PageHeader';
 
 interface Tenant {
-  id: number;
-  name: string;
-  created_at: string;
-  updated_at?: string;
-  tenant_id: string;
-  tenant_url: string;
-  description?: string;
-  company_name?: string;
-  industry_type?: string;
+    id: number;
+    name: string;
+    created_at: string;
+    updated_at?: string;
+    tenant_id: string;
+    tenant_url: string;
+    description?: string;
+    company_name?: string;
+    industry_type?: string;
 }
 interface TenantResponse {
-  tenants: Tenant[];
+    tenants: Tenant[];
 }
 
 async function getTenants(): Promise<TenantResponse> {
@@ -26,14 +29,22 @@ async function getTenants(): Promise<TenantResponse> {
     return response.json();
 }
 
-const Home = async () => {
+// need a new function which calls POST /tenants/ with the tenant form data to create a tenant
+// then the get /tenants should refetch / revalidate with the new tenant
+
+
+export default async function Home() {
     const apps = await getTenants();
-    const getLink = (tenant_url: string) => {
+    const getLink = (tenant_url: string): string => {
         return `https://${tenant_url}.ai-collective.xyz`;
     }
+
+
     return (
         <div className="p-8 max-w-6xl mx-auto">
-            <h1 className="text-3xl font-bold mb-8 text-center">Apps Library</h1>
+            {/* <div className="text-center">
+                <PageHeader />
+            </div> */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {apps.tenants.map(app => (
                     <div key={app.id} className="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow">
@@ -53,7 +64,5 @@ const Home = async () => {
                 ))}
             </div>
         </div>
-    );
-};
-
-export default Home;
+    )
+}
